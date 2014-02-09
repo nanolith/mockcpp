@@ -77,7 +77,7 @@ Within our unit test, we can construct the MockWidget, and control how it works.
 
     //assuming Google Test semantics here.
     ASSERT_TRUE(VALIDATE(widget, isReady).called());
-    ASSERT_TRUE(VALIDATE(widget, performAction).withArgs(1).called());
+    ASSERT_TRUE(VALIDATE(widget, performAction).called(1));
 ```
 
 Mocks have several different selectors, which allow the user to access
