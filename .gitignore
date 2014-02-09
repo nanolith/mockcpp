@@ -1,0 +1,8 @@
+*.swp
+*.swo
+*.o
+*.gcda
+*.gcno
+test/coverage
+test/mockcpp_test
+test/mockcpp_test.dSYM
