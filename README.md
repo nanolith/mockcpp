@@ -112,3 +112,37 @@ that don't support precompiled headers.
 
 mockpp/mockpp.h effectively includes world.  This is a quick and dirty way to
 get started.
+
+##Strict and Relaxed Evaluation
+
+By default, Mock++ uses strict evaluation of invocations.  This means that it
+cares about the order in which invocations are validated.  The reason why strict
+evaluation is useful is because it is often important to perform operations on
+an interface in a certain order.  For instance, we may wish to assert that the
+code under unit test empties a container before it adds elements to it.  If the
+calls happen in a different order, then we may not be able to easily test
+certain invariance rules.
+
+The downside of strict evaluation is that it can make unit tests brittle when
+the order of evaluation does not matter.  Mock++ provides a different mocking
+interface for relaxing this evaluation mechanism called RelaxedMock.  The
+RelaxedMock template is a plug-in replacement for Mock.  Instead of popping
+invocations off a queue and evaluating them against assertions in the test, it
+uses the called() matcher as a query, and finds the first result in the queue
+that matches this query.  This item is then popped off the queue.  If no matches
+are found, then the test assertion fails.
+
+```c++
+class RelaxedMockWidget : public Widget, public mockpp::RelaxedMock<Widget>
+{
+public:
+
+    ~RelaxedMockWidget() { }
+
+    MOCK_FUNCTION(bool, isReady);
+    MOCK_FUNCTION_VOID_ARGS(performAction, int);
+}
+```
+
+Here, RelaxedMockWidget can be used in our original test above, and the order of
+the two assertions at the bottom can be swapped with no ill effect.

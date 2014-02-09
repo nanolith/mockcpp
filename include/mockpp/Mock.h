@@ -1,6 +1,7 @@
 #ifndef  MOCKPP_MOCK_HEADER_GUARD
 # define MOCKPP_MOCK_HEADER_GUARD
 
+#include <algorithm>
 #include <functional>
 #include <mockpp/Invocation.h>
 
@@ -79,6 +80,52 @@ namespace mockpp {
 
             return
                 matcher(v.get());
+        }
+    };
+
+    /**
+     * RelaxedMock is a wrapper template that provides mocking facilities for a
+     * given type.  Mock uses relaxed checking for invocations, meaning that
+     * assertions can be made in any order, but as with Mock, cannot be
+     * duplicated.  This allows the code under unit test to be refactored in a
+     * way that changes the order of invocation of mock methods without breaking
+     * the unit test.
+     */
+    template <
+        typename MockedType>
+    class RelaxedMock : public BaseMock
+    {
+    protected:
+
+        /**
+         * Perform non-strict order evaluation of method invocations using the
+         * provided matcher.
+         */
+        virtual bool called(
+            std::function<bool (const BaseInvocation*)> matcher)
+        {
+            auto& inv = invocations();
+
+            //no need to go further if the invocations are empty
+            if (inv.empty())
+                return false;
+
+            //find an invocation that matches our matcher.
+            auto v = std::find_if(
+                        begin(inv),
+                        end(inv),
+                        [&](const BaseInvocationPtr& ptr) -> bool {
+                            return matcher(ptr.get()); } );
+
+            //stop if no matching entries were found
+            if (v == inv.end())
+                return false;
+
+            //result found.  Remove it.
+            inv.erase(v);
+
+            //success
+            return true;
         }
     };
 
