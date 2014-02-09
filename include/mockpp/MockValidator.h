@@ -2,7 +2,6 @@
 # define MOCKPP_MOCK_VALIDATOR_HEADER_GUARD
 
 #include <functional>
-#include <mockpp/Matchers.h>
 #include <mockpp/Mock.h>
 #include <mockpp/Invocation.h>
 
