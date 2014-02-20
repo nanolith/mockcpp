@@ -99,7 +99,7 @@ method fails if the arguments passed to the selector are invalid.  So, if the
 above assertion were changed to validate(widget).performAction(2).called(), the
 result would be false, which would cause the Google Test assertion to fail.
 
-##Header Naming Convention
+##Headers
 
 Headers in mockpp are differentiated between class headers and package headers.
 Class headers always begin with a capital letter, as do the classes they
@@ -110,7 +110,7 @@ declarations of classes in a given namespace, which is convenient for handling
 cyclic resolution issues, or for facilitating a faster compilation on systems
 that don't support precompiled headers.
 
-mockpp/mockpp.h effectively includes world.  This is a quick and dirty way to
+mockpp/mockpp.h effectively includes world.  This is a quick and easy way to
 get started.
 
 ##Strict and Relaxed Evaluation
@@ -159,7 +159,7 @@ In these cases, more sophisticated matchers are needed.
 Under the covers, the called() matcher is builds up a chain of matchers for
 individual elements.  It then uses this chain to match against invocations.  The
 called method is a template, and it will accept alternative arguments.  A user
-can either pass in the argument type it is expecting, which creates an
+can either pass in the argument type called is expecting, which creates an
 std::equal matcher, or the user can pass in a matcher argument, which can vary
 from std::greater / std::less to a user-defined lambda.
 

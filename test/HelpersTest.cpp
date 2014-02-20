@@ -149,6 +149,49 @@ TEST(HelperTest, basics_relaxed_out_of_order)
 }
 
 /**
+ * Test Probing and Validation with Ignore (example 3)
+ */
+TEST(HelperTest, basics_with_ignore)
+{
+    auto widget = new MockWidget(); //A takes ownership
+
+    PROBE(*widget, isReady).toReturn(true);
+    PROBE(*widget, performAction).toDo([](int i) { ASSERT_EQ(i, 1); });
+
+    auto a = make_shared<MockA>(widget);
+    PROBE(*a, frobulate).toDo([&]() {
+            if (widget->isReady())
+                widget->performAction(1);
+    });
+
+    a->frobulate();
+
+    ASSERT_TRUE(VALIDATE(*widget, isReady).called());
+    ASSERT_TRUE(VALIDATE(*widget, performAction).called(Ignore()));
+}
+
+/**
+ * Test Probing and Validation with lambda expressions (example 4)
+ */
+TEST(HelperTest, basics_with_lambda)
+{
+    auto widget = new MockWidget(); //A takes ownership
+
+    PROBE(*widget, isReady).toReturn(true);
+
+    auto a = make_shared<MockA>(widget);
+    PROBE(*a, frobulate).toDo([&]() {
+            if (widget->isReady())
+                widget->performAction(6); //note that this is > 5
+    });
+
+    a->frobulate();
+
+    ASSERT_TRUE(VALIDATE(*widget, isReady).called());
+    ASSERT_TRUE(VALIDATE(*widget, performAction).called([](int x) { return x > 5; }));
+}
+
+/**
  * Test validation on an empty invocation list.
  */
 TEST(HelperTest, validation_empty)
