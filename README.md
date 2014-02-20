@@ -177,3 +177,18 @@ argument for the invocation of performAction is greater than 5.
 ```c++
     ASSERT_TRUE(VALIDATE(widget, performAction).called([](int x) { return x > 5; }));
 ```
+
+##Future features
+
+Mock++ works now, and I am currently using it to unit test a compiler I am
+writing.  However, there are aspects of this framework which are not easy.  For
+one thing, there is no easy way to understand why assertions fail when using the
+called matcher.  It would be relatively easy to extend the MockValidator and
+MockProbe to accept a stringified name of the function and type, so that more
+intelligent error messages could be displayed.  Since this requires tighter
+integration with the unit testing framework, I kept this as a TODO.
+
+I would like to make this framework easier to use and understand.  Suggestions
+about how to do this are welcome.  My first focus was to get the framework
+running, and my second idea was to make it available to others who might need
+something like this.
