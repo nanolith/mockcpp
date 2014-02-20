@@ -2,6 +2,9 @@
 # define MOCKPP_MOCK_VALIDATOR_HEADER_GUARD
 
 #include <functional>
+#include <memory>
+#include <mockpp/detail/ArgumentMatcher.h>
+#include <mockpp/Matchers.h>
 #include <mockpp/Mock.h>
 #include <mockpp/Invocation.h>
 
@@ -60,27 +63,65 @@ namespace mockpp {
     public:
         ValidationBuilder(BaseMock& mock) : mockRef(mock) { }
 
-        bool called(ArgumentTypes... args)
+        template<
+            typename... ArgTypes>
+        bool called(ArgTypes... args)
         {
-            auto expectedArgs = std::tuple<ArgumentTypes...>(args...);
-
             return
-                mockRef.called([&](const BaseInvocation* inv) -> bool {
-                    //cast this invocation to our invocation type
-                    auto ptr =
-                        dynamic_cast<
-                            const Invocation<
-                                MockValidator<ReturnType, ArgumentTypes...>,
-                                ArgumentTypes...>* >(inv);
+                mockRef.called(buildCallMatcher(args...));
+        }
 
-                    //this was an invocation for a different function.
-                    if (ptr == nullptr)
-                        return false;
+    protected:
 
-                    //it must match our expected args
-                    return
-                        ptr->args() == expectedArgs;
-                });
+        /**
+         * Build a lambda expression for matching our arguments.
+         */
+        template<
+            typename... ArgTypes>
+        std::function<bool (const BaseInvocation*)>
+        buildCallMatcher(ArgTypes... args)
+        {
+            auto argsMatcher =
+                detail::ArgumentMatcher<0, std::tuple<ArgumentTypes...> >(args...);
+
+            return [=](const BaseInvocation* inv) -> bool {
+                //cast this invocation to our invocation type
+                auto ptr =
+                    dynamic_cast<
+                        const Invocation<
+                            MockValidator<ReturnType, ArgumentTypes...>,
+                            ArgumentTypes...>* >(inv);
+
+                //this was an invocation for a different function.
+                if (ptr == nullptr)
+                    return false;
+
+                //it must match our expected args
+                return
+                    argsMatcher(ptr->args());
+            };
+        }
+
+        /**
+         * Build a lambda expression for matching our arguments.
+         * This version handles no arguments.
+         */
+        std::function<bool (const BaseInvocation*)>
+        buildCallMatcher()
+        {
+            return [=](const BaseInvocation* inv) -> bool {
+                //cast this invocation to our invocation type
+                auto ptr =
+                    dynamic_cast<
+                        const Invocation<
+                            MockValidator<ReturnType, ArgumentTypes...>,
+                            ArgumentTypes...>* >(inv);
+
+                //if the pointer is not null, then it is an invocation for this
+                //function.
+                return
+                    ptr != nullptr;
+            };
         }
 
     private:

@@ -146,3 +146,34 @@ public:
 
 Here, RelaxedMockWidget can be used in our original test above, and the order of
 the two assertions at the bottom can be swapped with no ill effect.
+
+##Matchers and "Don't Care"
+
+So far, the called() matcher has been demonstrated.  This matcher takes
+arguments that match the arguments of the call to the invoked method.  However,
+sometimes the test does not care about which arguments were passed to the
+invocation.  Other times, there is no way for the unit test to predict the
+parameters, such as when an ephemeral object is passed to the invoked method.
+In these cases, more sophisticated matchers are needed.
+
+Under the covers, the called() matcher is builds up a chain of matchers for
+individual elements.  It then uses this chain to match against invocations.  The
+called method is a template, and it will accept alternative arguments.  A user
+can either pass in the argument type it is expecting, which creates an
+std::equal matcher, or the user can pass in a matcher argument, which can vary
+from std::greater / std::less to a user-defined lambda.
+
+Consider the following modification to the above example, which ignores the
+argument passed to performAction.  Here, the assertion passes, as expected.
+
+```c++
+    ASSERT_TRUE(VALIDATE(widget, performAction).called(Ignore()));
+```
+
+It is also beneficial to have the ability to pass in lambda expressions to
+evaluate the parameter.  For instance, this assertion returns true only if the
+argument for the invocation of performAction is greater than 5.
+
+```c++
+    ASSERT_TRUE(VALIDATE(widget, performAction).called([](int x) { return x > 5; }));
+```
