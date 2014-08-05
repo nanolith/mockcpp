@@ -11,8 +11,8 @@
         return functionName##_PROBE(); \
     }\
     \
-    MockProbe<returnType> functionName##_PROBE; \
-    MockValidator<returnType> functionName##_VALIDATE;
+    ::mockpp::MockProbe<returnType> functionName##_PROBE; \
+    ::mockpp::MockValidator<returnType> functionName##_VALIDATE;
 
 #define MOCK_FUNCTION_VOID(functionName) \
 	void functionName() \
@@ -22,8 +22,8 @@
         return functionName##_PROBE(); \
     }\
     \
-    MockProbe<void> functionName##_PROBE; \
-    MockValidator<void> functionName##_VALIDATE;
+    ::mockpp::MockProbe<void> functionName##_PROBE; \
+    ::mockpp::MockValidator<void> functionName##_VALIDATE;
 
 #define MOCK_FUNCTION_VOID_ARGS(functionName,...) \
 	void functionName(MAKE_PARAMS(__VA_ARGS__)) \
@@ -33,8 +33,8 @@
         return functionName##_PROBE(MAKE_ARGS(__VA_ARGS__)); \
     }\
     \
-    MockProbe<void,__VA_ARGS__> functionName##_PROBE; \
-    MockValidator<void,__VA_ARGS__> functionName##_VALIDATE;
+    ::mockpp::MockProbe<void,__VA_ARGS__> functionName##_PROBE; \
+    ::mockpp::MockValidator<void,__VA_ARGS__> functionName##_VALIDATE;
 
 #define MOCK_FUNCTION_ARGS(returnType,functionName,...) \
 	returnType functionName(MAKE_PARAMS(__VA_ARGS__)) \
@@ -44,8 +44,8 @@
         return functionName##_PROBE(MAKE_ARGS(__VA_ARGS__)); \
     }\
     \
-    MockProbe<returnType,__VA_ARGS__> functionName##_PROBE; \
-    MockValidator<returnType,__VA_ARGS__> functionName##_VALIDATE;
+    ::mockpp::MockProbe<returnType,__VA_ARGS__> functionName##_PROBE; \
+    ::mockpp::MockValidator<returnType,__VA_ARGS__> functionName##_VALIDATE;
 
 #define PROBE(obj, method) (obj).method##_PROBE
 #define VALIDATE(obj, method) (obj).method##_VALIDATE.validationBuilder(obj)
