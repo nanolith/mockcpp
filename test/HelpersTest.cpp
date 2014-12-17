@@ -31,6 +31,17 @@ private:
 };
 
 /**
+ * Const test interface.
+ */
+class B
+{
+public:
+
+    virtual void frobulate() const = 0;
+    virtual bool testIt(int x) const = 0;
+};
+
+/**
  * Mock the Widget interface.
  */
 class MockWidget : public Widget, public mockpp::Mock<Widget>
@@ -63,6 +74,17 @@ public:
     MockA(Widget* widget) : A(widget) { }
 
     MOCK_FUNCTION_VOID(frobulate);
+};
+
+/**
+ * Mock const test interface.
+ */
+class MockB : public B, public mockpp::Mock<B>
+{
+public:
+
+    MOCK_CONST_FUNCTION_VOID(frobulate);
+    MOCK_CONST_FUNCTION_ARGS(bool, testIt, int);
 };
 
 /**
@@ -225,4 +247,22 @@ TEST(HelperTest, validation_none)
 
     //there should still be one invocation
     ASSERT_EQ(1, widget->invocations().size());
+}
+
+/**
+ * Should be able to instantiate and use MockB interface with constant
+ * functions
+ */
+TEST(HelperTest, const_member_functions)
+{
+    auto b = make_shared<MockB>();
+
+    ASSERT_FALSE(VALIDATE(*b, frobulate).called());
+    ASSERT_FALSE(VALIDATE(*b, testIt).called(0));
+
+    b->frobulate();
+    b->testIt(0);
+
+    EXPECT_TRUE(VALIDATE(*b, frobulate).called());
+    EXPECT_TRUE(VALIDATE(*b, testIt).called(0));
 }

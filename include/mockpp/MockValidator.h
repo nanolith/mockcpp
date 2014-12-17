@@ -39,6 +39,16 @@ namespace mockpp {
         }
 
         /**
+         * Add an invocation with the given arguments.
+         */
+        void addInvocation(const BaseMock& mock, ArgumentTypes... args)
+        {
+            const_cast<BaseMock&>(mock).invocations().push_back(
+                std::make_shared< Invocation<MockValidator, ArgumentTypes...> >(
+                    args...));
+        }
+
+        /**
          * Create a ValidationBuilder for this mock.
          */
         ValidationBuilder<ReturnType, ArgumentTypes...>
