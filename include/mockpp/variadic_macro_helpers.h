@@ -121,12 +121,12 @@
     arg14
 #define MAKE_ARGS_15(t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, \
                      t14, t15) \
-    MAKE_ARGS_14(t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14) \
+    MAKE_ARGS_14(t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14), \
     arg15
 #define MAKE_ARGS_16(t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, \
                      t14, t15, t16) \
     MAKE_ARGS_15(t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, \
-                 t15) \
+                 t15), \
     arg16
 
 #define MAKE_ARGS_N(N, ...) MAKE_ARGS_##N(__VA_ARGS__)
