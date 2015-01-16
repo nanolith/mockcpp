@@ -1,6 +1,7 @@
 #ifndef  MOCKPP_HELPERS_HEADER_GUARD
 # define MOCKPP_HELPERS_HEADER_GUARD
 
+#include <type_traits>
 #include <mockpp/variadic_macro_helpers.h>
 
 #define MOCK_FUNCTION(returnType, functionName) \
@@ -33,8 +34,8 @@
         return functionName##_PROBE(MAKE_ARGS(__VA_ARGS__)); \
     }\
     \
-    ::mockpp::MockProbe<void,__VA_ARGS__> functionName##_PROBE; \
-    ::mockpp::MockValidator<void,__VA_ARGS__> functionName##_VALIDATE;
+    ::mockpp::MockProbe<void,REMOVE_REFS(__VA_ARGS__)> functionName##_PROBE; \
+    ::mockpp::MockValidator<void,REMOVE_REFS(__VA_ARGS__)> functionName##_VALIDATE;
 
 #define MOCK_FUNCTION_ARGS(returnType,functionName,...) \
 	returnType functionName(MAKE_PARAMS(__VA_ARGS__)) \
@@ -44,8 +45,8 @@
         return functionName##_PROBE(MAKE_ARGS(__VA_ARGS__)); \
     }\
     \
-    ::mockpp::MockProbe<returnType,__VA_ARGS__> functionName##_PROBE; \
-    ::mockpp::MockValidator<returnType,__VA_ARGS__> functionName##_VALIDATE;
+    ::mockpp::MockProbe<returnType,REMOVE_REFS(__VA_ARGS__)> functionName##_PROBE; \
+    ::mockpp::MockValidator<returnType,REMOVE_REFS(__VA_ARGS__)> functionName##_VALIDATE;
 
 
 #define MOCK_CONST_FUNCTION(returnType, functionName) \
@@ -78,8 +79,8 @@
         return functionName##_PROBE(MAKE_ARGS(__VA_ARGS__)); \
     }\
     \
-    mutable ::mockpp::MockProbe<void,__VA_ARGS__> functionName##_PROBE; \
-    mutable ::mockpp::MockValidator<void,__VA_ARGS__> functionName##_VALIDATE;
+    mutable ::mockpp::MockProbe<void,REMOVE_REFS(__VA_ARGS__)> functionName##_PROBE; \
+    mutable ::mockpp::MockValidator<void,REMOVE_REFS(__VA_ARGS__)> functionName##_VALIDATE;
 
 #define MOCK_CONST_FUNCTION_ARGS(returnType,functionName,...) \
 	returnType functionName(MAKE_PARAMS(__VA_ARGS__)) const \
@@ -89,8 +90,8 @@
         return functionName##_PROBE(MAKE_ARGS(__VA_ARGS__)); \
     }\
     \
-    mutable ::mockpp::MockProbe<returnType,__VA_ARGS__> functionName##_PROBE; \
-    mutable ::mockpp::MockValidator<returnType,__VA_ARGS__> functionName##_VALIDATE;
+    mutable ::mockpp::MockProbe<returnType,REMOVE_REFS(__VA_ARGS__)> functionName##_PROBE; \
+    mutable ::mockpp::MockValidator<returnType,REMOVE_REFS(__VA_ARGS__)> functionName##_VALIDATE;
 
 #define PROBE(obj, method) (obj).method##_PROBE
 #define VALIDATE(obj, method) (obj).method##_VALIDATE.validationBuilder(obj)

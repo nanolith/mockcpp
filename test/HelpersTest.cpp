@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 #include <memory>
 #include <mockpp/mockpp.h>
+#include <string>
 
 using namespace mockpp;
 using namespace std;
@@ -39,6 +40,16 @@ public:
 
     virtual void frobulate() const = 0;
     virtual bool testIt(int x) const = 0;
+};
+
+/**
+ * reference test interface.
+ */
+class C
+{
+public:
+
+    virtual void testRef(const string&) const = 0;
 };
 
 /**
@@ -85,6 +96,16 @@ public:
 
     MOCK_CONST_FUNCTION_VOID(frobulate);
     MOCK_CONST_FUNCTION_ARGS(bool, testIt, int);
+};
+
+/**
+ * Mock reference test interface.
+ */
+class MockC : public mockpp::Mock<C>
+{
+public:
+
+    MOCK_CONST_FUNCTION_VOID_ARGS(testRef, const string&);
 };
 
 /**
@@ -265,4 +286,25 @@ TEST(HelperTest, const_member_functions)
 
     EXPECT_TRUE(VALIDATE(*b, frobulate).called());
     EXPECT_TRUE(VALIDATE(*b, testIt).called(0));
+}
+
+/**
+ * Should be able to store values to references.
+ */
+TEST(HelperTest, reference_removal)
+{
+    const string EXPECTED_STRING("This is a test.");
+    auto c = make_shared<MockC>();
+
+    ASSERT_FALSE(VALIDATE(*c, testRef).called(EXPECTED_STRING));
+
+    //create a temporary
+    string x = EXPECTED_STRING;
+
+    c->testRef(x);
+
+    //mutate this temporary
+    x = "Some other value.";
+
+    EXPECT_TRUE(VALIDATE(*c, testRef).called(EXPECTED_STRING));
 }

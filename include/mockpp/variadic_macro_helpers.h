@@ -133,4 +133,62 @@
 #define MAKE_ARGS_FORCE_N(N, ...) MAKE_ARGS_N(N, __VA_ARGS__)
 #define MAKE_ARGS(...) MAKE_ARGS_FORCE_N(NUM_ARGS(__VA_ARGS__), __VA_ARGS__)
 
+//Remove references of the given types
+#define REMOVE_REFS_0()
+#define REMOVE_REFS_1(t1) \
+    std::remove_reference<t1>::type
+#define REMOVE_REFS_2(t1, t2) \
+    REMOVE_REFS_1(t1), \
+    std::remove_reference<t2>::type
+#define REMOVE_REFS_3(t1, t2, t3) \
+    REMOVE_REFS_2(t1, t2), \
+    std::remove_reference<t3>::type
+#define REMOVE_REFS_4(t1, t2, t3, t4) \
+    REMOVE_REFS_3(t1, t2, t3), \
+    std::remove_reference<t4>::type
+#define REMOVE_REFS_5(t1, t2, t3, t4, t5) \
+    REMOVE_REFS_4(t1, t2, t3, t4), \
+    std::remove_reference<t5>::type
+#define REMOVE_REFS_6(t1, t2, t3, t4, t5, t6) \
+    REMOVE_REFS_5(t1, t2, t3, t4, t5), \
+    std::remove_reference<t6>::type
+#define REMOVE_REFS_7(t1, t2, t3, t4, t5, t6, t7) \
+    REMOVE_REFS_6(t1, t2, t3, t4, t5, t6), \
+    std::remove_reference<t7>::type
+#define REMOVE_REFS_8(t1, t2, t3, t4, t5, t6, t7, t8) \
+    REMOVE_REFS_7(t1, t2, t3, t4, t5, t6, t7), \
+    std::remove_reference<t8>::type
+#define REMOVE_REFS_9(t1, t2, t3, t4, t5, t6, t7, t8, t9) \
+    REMOVE_REFS_8(t1, t2, t3, t4, t5, t6, t7, t8), \
+    std::remove_reference<t9>::type
+#define REMOVE_REFS_10(t1, t2, t3, t4, t5, t6, t7, t8, t9, t10) \
+    REMOVE_REFS_9(t1, t2, t3, t4, t5, t6, t7, t8, t9), \
+    std::remove_reference<t10>::type
+#define REMOVE_REFS_11(t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11) \
+    REMOVE_REFS_10(t1, t2, t3, t4, t5, t6, t7, t8, t9, t10), \
+    std::remove_reference<t11>::type
+#define REMOVE_REFS_12(t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12) \
+    REMOVE_REFS_11(t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11), \
+    std::remove_reference<t12>::type
+#define REMOVE_REFS_13(t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13) \
+    REMOVE_REFS_12(t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12), \
+    std::remove_reference<t13>::type
+#define REMOVE_REFS_14(t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, \
+                     t14) \
+    REMOVE_REFS_13(t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13), \
+    std::remove_reference<t14>::type
+#define REMOVE_REFS_15(t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, \
+                     t14, t15) \
+    REMOVE_REFS_14(t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14), \
+    std::remove_reference<t15>::type
+#define REMOVE_REFS_16(t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, \
+                     t14, t15, t16) \
+    REMOVE_REFS_15(t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, \
+                 t15), \
+    std::remove_reference<t16>::type
+
+#define REMOVE_REFS_N(N, ...) REMOVE_REFS_##N(__VA_ARGS__)
+#define REMOVE_REFS_FORCE_N(N, ...) REMOVE_REFS_N(N, __VA_ARGS__)
+#define REMOVE_REFS(...) REMOVE_REFS_FORCE_N(NUM_ARGS(__VA_ARGS__), __VA_ARGS__)
+
 #endif //MOCKPP_VARIADIC_MACRO_HELPERS_HEADER_GUARD
