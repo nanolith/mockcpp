@@ -86,7 +86,11 @@ to control behavior of the mock object.  In this case, we probe the isReady
 function to return true when called. By default, a mocked function will return
 whichever value is considered the default value initialization for a constructed
 type.  In this case, bools return false.  Ints return 0.  Pointers return
-nullptr.
+nullptr. Next, we probe the performAction function so that it performs the
+lambda expression we pass in, which asserts that the parameter passed into
+performAction equals 1.  Being able to override the behavior of mocked functions
+is a powerful feature found in most mocking frameworks.  With C++11 lambda
+expressions, we can do the same thing.
 
 The mock is then passed to the constructor of A.  When the frobulate method of A
 is called, it uses the mock object.  We can then validate its use of the mock by
