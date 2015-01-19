@@ -194,6 +194,6 @@ intelligent error messages could be displayed.  Since this requires tighter
 integration with the unit testing framework, I kept this as a TODO.
 
 I would like to make this framework easier to use and understand.  Suggestions
-about how to do this are welcome.  My first focus was to get the framework
+about how to do this are welcome.  My first priority was to get the framework
 running, and my second idea was to make it available to others who might need
 something like this.
