@@ -15,8 +15,9 @@ use. Only the unit tests themselves must make use of these features.
 
 ##Usage Example
 
-The following example illustrates the use of this library.  As with any OO code
-that can be mocked, one must first create an interface or abstract base class:
+The following example illustrates the use of this library.  We can mock any
+virtual method that can be overridden by a derived type, but for sake of
+example, we will create a pure abstract interface.
 
 ```c++
 class Widget
