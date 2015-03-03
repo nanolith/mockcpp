@@ -53,6 +53,17 @@ public:
 };
 
 /**
+ * polymorphic test interface
+ */
+class Poly
+{
+public:
+
+    virtual void testPoly(const int&) const = 0;
+    virtual void testPoly(const string&) const = 0;
+};
+
+/**
  * Mock the Widget interface.
  */
 class MockWidget : public Widget, public mockpp::Mock<Widget>
@@ -106,6 +117,17 @@ class MockC : public mockpp::Mock<C>
 public:
 
     MOCK_CONST_FUNCTION_VOID_ARGS(testRef, const string&);
+};
+
+/**
+ * Mock poly test interface.
+ */
+class MockPoly : public mockpp::Mock<Poly>
+{
+public:
+
+    MOCK_POLY_CONST_FUNCTION_VOID_ARGS(testPoly,testPolyInt,const int&);
+    MOCK_POLY_CONST_FUNCTION_VOID_ARGS(testPoly,testPolyString,const string&);
 };
 
 /**
@@ -307,4 +329,31 @@ TEST(HelperTest, reference_removal)
     x = "Some other value.";
 
     EXPECT_TRUE(VALIDATE(*c, testRef).called(EXPECTED_STRING));
+}
+
+/**
+ * Should be able to mock polymorphic functions.
+ */
+TEST(HelperTest, polymorphic_mock)
+{
+    const int EXPECTED_INT = 31;
+    const string EXPECTED_STRING("This is a test.");
+    auto c = make_shared<MockPoly>();
+
+    ASSERT_FALSE(VALIDATE(*c, testPolyString).called(EXPECTED_STRING));
+    ASSERT_FALSE(VALIDATE(*c, testPolyInt).called(EXPECTED_INT));
+
+    //create a temporary
+    string x = EXPECTED_STRING;
+    int y = EXPECTED_INT;
+
+    c->testPoly(x);
+    c->testPoly(y);
+
+    //mutate this temporary
+    x = "Some other value.";
+    y = 21;
+
+    EXPECT_TRUE(VALIDATE(*c, testPolyString).called(EXPECTED_STRING));
+    EXPECT_TRUE(VALIDATE(*c, testPolyInt).called(EXPECTED_INT));
 }

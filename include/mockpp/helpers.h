@@ -4,94 +4,118 @@
 #include <type_traits>
 #include <mockpp/variadic_macro_helpers.h>
 
-#define MOCK_FUNCTION(returnType, functionName) \
+#define MOCK_POLY_FUNCTION(returnType, functionName, helperName) \
     returnType functionName() \
     { \
-        functionName##_VALIDATE.addInvocation(*this); \
+        helperName##_VALIDATE.addInvocation(*this); \
         \
-        return functionName##_PROBE(); \
+        return helperName##_PROBE(); \
     }\
     \
-    ::mockpp::MockProbe<returnType> functionName##_PROBE; \
-    ::mockpp::MockValidator<returnType> functionName##_VALIDATE;
+    ::mockpp::MockProbe<returnType> helperName##_PROBE; \
+    ::mockpp::MockValidator<returnType> helperName##_VALIDATE;
 
-#define MOCK_FUNCTION_VOID(functionName) \
+#define MOCK_POLY_FUNCTION_VOID(functionName, helperName) \
 	void functionName() \
     { \
-        functionName##_VALIDATE.addInvocation(*this); \
+        helperName##_VALIDATE.addInvocation(*this); \
         \
-        return functionName##_PROBE(); \
+        return helperName##_PROBE(); \
     }\
     \
-    ::mockpp::MockProbe<void> functionName##_PROBE; \
-    ::mockpp::MockValidator<void> functionName##_VALIDATE;
+    ::mockpp::MockProbe<void> helperName##_PROBE; \
+    ::mockpp::MockValidator<void> helperName##_VALIDATE;
 
-#define MOCK_FUNCTION_VOID_ARGS(functionName,...) \
+#define MOCK_POLY_FUNCTION_VOID_ARGS(functionName,helperName,...) \
 	void functionName(MAKE_PARAMS(__VA_ARGS__)) \
     { \
-        functionName##_VALIDATE.addInvocation(*this, MAKE_ARGS(__VA_ARGS__)); \
+        helperName##_VALIDATE.addInvocation(*this, MAKE_ARGS(__VA_ARGS__)); \
         \
-        return functionName##_PROBE(MAKE_ARGS(__VA_ARGS__)); \
+        return helperName##_PROBE(MAKE_ARGS(__VA_ARGS__)); \
     }\
     \
-    ::mockpp::MockProbe<void,REMOVE_REFS(__VA_ARGS__)> functionName##_PROBE; \
-    ::mockpp::MockValidator<void,REMOVE_REFS(__VA_ARGS__)> functionName##_VALIDATE;
+    ::mockpp::MockProbe<void,REMOVE_REFS(__VA_ARGS__)> helperName##_PROBE; \
+    ::mockpp::MockValidator<void,REMOVE_REFS(__VA_ARGS__)> helperName##_VALIDATE;
 
-#define MOCK_FUNCTION_ARGS(returnType,functionName,...) \
+#define MOCK_POLY_FUNCTION_ARGS(returnType,functionName,helperName,...) \
 	returnType functionName(MAKE_PARAMS(__VA_ARGS__)) \
     { \
-        functionName##_VALIDATE.addInvocation(*this, MAKE_ARGS(__VA_ARGS__)); \
+        helperName##_VALIDATE.addInvocation(*this, MAKE_ARGS(__VA_ARGS__)); \
         \
-        return functionName##_PROBE(MAKE_ARGS(__VA_ARGS__)); \
+        return helperName##_PROBE(MAKE_ARGS(__VA_ARGS__)); \
     }\
     \
-    ::mockpp::MockProbe<returnType,REMOVE_REFS(__VA_ARGS__)> functionName##_PROBE; \
-    ::mockpp::MockValidator<returnType,REMOVE_REFS(__VA_ARGS__)> functionName##_VALIDATE;
+    ::mockpp::MockProbe<returnType,REMOVE_REFS(__VA_ARGS__)> helperName##_PROBE; \
+    ::mockpp::MockValidator<returnType,REMOVE_REFS(__VA_ARGS__)> helperName##_VALIDATE;
 
 
-#define MOCK_CONST_FUNCTION(returnType, functionName) \
+#define MOCK_POLY_CONST_FUNCTION(returnType, functionName, helperName) \
     returnType functionName() const \
     { \
-        functionName##_VALIDATE.addInvocation(*this); \
+        helperName##_VALIDATE.addInvocation(*this); \
         \
-        return functionName##_PROBE(); \
+        return helperName##_PROBE(); \
     }\
     \
-    mutable ::mockpp::MockProbe<returnType> functionName##_PROBE; \
-    mutable ::mockpp::MockValidator<returnType> functionName##_VALIDATE;
+    mutable ::mockpp::MockProbe<returnType> helperName##_PROBE; \
+    mutable ::mockpp::MockValidator<returnType> helperName##_VALIDATE;
 
-#define MOCK_CONST_FUNCTION_VOID(functionName) \
+#define MOCK_POLY_CONST_FUNCTION_VOID(functionName, helperName) \
 	void functionName() const \
     { \
-        functionName##_VALIDATE.addInvocation(*this); \
+        helperName##_VALIDATE.addInvocation(*this); \
         \
-        return functionName##_PROBE(); \
+        return helperName##_PROBE(); \
     }\
     \
-    mutable ::mockpp::MockProbe<void> functionName##_PROBE; \
-    mutable ::mockpp::MockValidator<void> functionName##_VALIDATE;
+    mutable ::mockpp::MockProbe<void> helperName##_PROBE; \
+    mutable ::mockpp::MockValidator<void> helperName##_VALIDATE;
 
-#define MOCK_CONST_FUNCTION_VOID_ARGS(functionName,...) \
+#define MOCK_POLY_CONST_FUNCTION_VOID_ARGS(functionName,helperName,...) \
 	void functionName(MAKE_PARAMS(__VA_ARGS__)) const \
     { \
-        functionName##_VALIDATE.addInvocation(*this, MAKE_ARGS(__VA_ARGS__)); \
+        helperName##_VALIDATE.addInvocation(*this, MAKE_ARGS(__VA_ARGS__)); \
         \
-        return functionName##_PROBE(MAKE_ARGS(__VA_ARGS__)); \
+        return helperName##_PROBE(MAKE_ARGS(__VA_ARGS__)); \
     }\
     \
-    mutable ::mockpp::MockProbe<void,REMOVE_REFS(__VA_ARGS__)> functionName##_PROBE; \
-    mutable ::mockpp::MockValidator<void,REMOVE_REFS(__VA_ARGS__)> functionName##_VALIDATE;
+    mutable ::mockpp::MockProbe<void,REMOVE_REFS(__VA_ARGS__)> helperName##_PROBE; \
+    mutable ::mockpp::MockValidator<void,REMOVE_REFS(__VA_ARGS__)> helperName##_VALIDATE;
 
-#define MOCK_CONST_FUNCTION_ARGS(returnType,functionName,...) \
+#define MOCK_POLY_CONST_FUNCTION_ARGS(returnType,functionName,helperName,...) \
 	returnType functionName(MAKE_PARAMS(__VA_ARGS__)) const \
     { \
-        functionName##_VALIDATE.addInvocation(*this, MAKE_ARGS(__VA_ARGS__)); \
+        helperName##_VALIDATE.addInvocation(*this, MAKE_ARGS(__VA_ARGS__)); \
         \
-        return functionName##_PROBE(MAKE_ARGS(__VA_ARGS__)); \
+        return helperName##_PROBE(MAKE_ARGS(__VA_ARGS__)); \
     }\
     \
-    mutable ::mockpp::MockProbe<returnType,REMOVE_REFS(__VA_ARGS__)> functionName##_PROBE; \
-    mutable ::mockpp::MockValidator<returnType,REMOVE_REFS(__VA_ARGS__)> functionName##_VALIDATE;
+    mutable ::mockpp::MockProbe<returnType,REMOVE_REFS(__VA_ARGS__)> helperName##_PROBE; \
+    mutable ::mockpp::MockValidator<returnType,REMOVE_REFS(__VA_ARGS__)> helperName##_VALIDATE;
+
+#define MOCK_FUNCTION(returnType, functionName) \
+    MOCK_POLY_FUNCTION(returnType, functionName, functionName)
+
+#define MOCK_FUNCTION_VOID(functionName) \
+    MOCK_POLY_FUNCTION_VOID(functionName, functionName)
+
+#define MOCK_FUNCTION_VOID_ARGS(functionName,...) \
+    MOCK_POLY_FUNCTION_VOID_ARGS(functionName,functionName,__VA_ARGS__)
+
+#define MOCK_FUNCTION_ARGS(returnType,functionName,...) \
+    MOCK_POLY_FUNCTION_ARGS(returnType,functionName,functionName,__VA_ARGS__)
+
+#define MOCK_CONST_FUNCTION(returnType, functionName) \
+    MOCK_POLY_CONST_FUNCTION(returnType,functionName,functionName)
+
+#define MOCK_CONST_FUNCTION_VOID(functionName) \
+    MOCK_POLY_CONST_FUNCTION_VOID(functionName,functionName)
+
+#define MOCK_CONST_FUNCTION_VOID_ARGS(functionName,...) \
+    MOCK_POLY_CONST_FUNCTION_VOID_ARGS(functionName,functionName,__VA_ARGS__)
+
+#define MOCK_CONST_FUNCTION_ARGS(returnType,functionName,...) \
+    MOCK_POLY_CONST_FUNCTION_ARGS(returnType,functionName,functionName,__VA_ARGS__)
 
 #define PROBE(obj, method) (obj).method##_PROBE
 #define VALIDATE(obj, method) (obj).method##_VALIDATE.validationBuilder(obj)
