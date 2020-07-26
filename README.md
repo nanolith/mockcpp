@@ -13,7 +13,8 @@ the C++11 standard.  Using this framework does not require a migration to C++11,
 however, as code can be written in C++98 or whichever subsets one chooses to
 use. Only the unit tests themselves must make use of these features.
 
-##Usage Example
+Usage Example
+=============
 
 The following example illustrates the use of this library.  We can mock any
 virtual method that can be overridden by a derived type, but for sake of
@@ -104,7 +105,8 @@ method fails if the arguments passed to the selector are invalid.  So, if the
 above assertion were changed to validate(widget).performAction(2).called(), the
 result would be false, which would cause the Google Test assertion to fail.
 
-##Headers
+Headers
+=======
 
 Headers in mockpp are differentiated between class headers and package headers.
 Class headers always begin with a capital letter, as do the classes they
@@ -118,7 +120,8 @@ that don't support precompiled headers.
 mockpp/mockpp.h effectively includes world.  This is a quick and easy way to
 get started.
 
-##Strict and Relaxed Evaluation
+Strict and Relaxed Evaluation
+=============================
 
 By default, Mock++ uses strict evaluation of invocations.  This means that it
 cares about the order in which invocations are validated.  The reason why strict
@@ -152,7 +155,8 @@ public:
 Here, RelaxedMockWidget can be used in our original test above, and the order of
 the two assertions at the bottom can be swapped with no ill effect.
 
-##Matchers and "Don't Care"
+Matchers and "Don't Care"
+=========================
 
 So far, the called() matcher has been demonstrated.  This matcher takes
 arguments that match the arguments of the call to the invoked method.  However,
@@ -183,7 +187,8 @@ argument for the invocation of performAction is greater than 5.
     ASSERT_TRUE(VALIDATE(widget, performAction).called([](int x) { return x > 5; }));
 ```
 
-##Future features
+Future features
+===============
 
 Mock++ works now, and I am currently using it to unit test a compiler I am
 writing.  However, there are aspects of this framework which are not easy.  For
